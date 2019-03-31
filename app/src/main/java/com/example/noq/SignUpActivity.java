@@ -55,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserSignUpTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -107,6 +107,14 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             }
         });
 
+        Button mOrSignInAsAdminButton = (Button) findViewById(R.id.sign_up_as_admin_button);
+        mOrSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSignUpAsAdminActivity();
+            }
+        });
+
         mSignUpFormView = findViewById(R.id.signup_form);
         mSignUpProgressView = findViewById(R.id.signup_progress);
     }
@@ -122,6 +130,11 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
     private void getSignInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void getSignUpAsAdminActivity() {
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
     }
 
     private boolean mayRequestContacts() {
@@ -177,6 +190,8 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String firstname = mFirstNameView.getText().toString();
+        String lastname = mLastNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -185,6 +200,20 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid first name, if the user entered one.
+        if (!TextUtils.isEmpty(firstname)) {
+            mFirstNameView.setError("Please enter a first name");
+            focusView = mFirstNameView;
+            cancel = true;
+        }
+
+        // Check for a valid lastname, if the user entered one.
+        if (!TextUtils.isEmpty(lastname)) {
+            mLastNameView.setError("Please enter a last name");
+            focusView = mLastNameView;
             cancel = true;
         }
 
@@ -207,7 +236,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserSignUpTask(email, password, firstname, lastname );
             mAuthTask.execute((Void) null);
         }
     }
@@ -316,14 +345,18 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserSignUpTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
+        private final String mFirstname;
+        private final String mLastname;
 
-        UserLoginTask(String email, String password) {
+        UserSignUpTask(String email, String password, String firstname, String lastname) {
             mEmail = email;
             mPassword = password;
+            mFirstname = firstname;
+            mLastname = lastname;
         }
 
         @Override

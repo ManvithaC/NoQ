@@ -99,6 +99,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mOrSignUpAsAdminButton = (Button) findViewById(R.id.sign_in_as_admin_button);
+        mOrSignUpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSignUpAsAdminActivity();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -114,6 +122,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void getSignUpActivity() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+    }
+
+    private void getSignUpAsAdminActivity() {
+//        Intent intent = new Intent(this, SignUpActivity.class);
+//        startActivity(intent);
     }
 
     private boolean mayRequestContacts() {

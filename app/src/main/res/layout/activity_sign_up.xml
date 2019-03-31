@@ -119,7 +119,20 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:background="#3D4FB2"
-                android:text="Sign Up"
+                android:text="Sign up as user"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/sign_up_as_admin_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="#3D4FB2"
+                android:text="Sign Up as admin"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
                 android:textStyle="bold" />
