@@ -90,8 +90,7 @@
                 android:background="#3D4FB2"
                 android:text="Sign in as User"
                 android:textColor="@android:color/white"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textSize="17dp" />
 
             <Button
                 android:id="@+id/sign_in_as_admin_button"
@@ -103,8 +102,7 @@
                 android:background="#3D4FB2"
                 android:text="Sign in as admin"
                 android:textColor="@android:color/white"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textSize="17dp" />
 
             <Button
                 android:id="@+id/or_signup_button"

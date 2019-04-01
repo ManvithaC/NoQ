@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,11 +92,19 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.sign_up_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignUpButton = (Button) findViewById(R.id.sign_up_button);
+        mSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mSignUpAsAdminButton = (Button) findViewById(R.id.sign_up_as_admin_button);
+        mSignUpAsAdminButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSignInActivity();
             }
         });
 
@@ -104,14 +113,6 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             @Override
             public void onClick(View view) {
                 getSignInActivity();
-            }
-        });
-
-        Button mOrSignInAsAdminButton = (Button) findViewById(R.id.sign_up_as_admin_button);
-        mOrSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSignUpAsAdminActivity();
             }
         });
 
@@ -370,16 +371,24 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+            try {
+                System.out.println("------------");
+                System.out.println(getJSONData());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             // TODO: register the new account here.
             return true;
+        }
+
+        protected String getJSONData() throws IOException {
+
+            String url = "https://wt-515a87db7f752d0a7fe8f6ce74d01d2c-0.sandbox.auth0-extend.com/sample";
+            DownloadUrl downloadUrl = new DownloadUrl();
+            String returnData = downloadUrl.readUrl(url);
+
+            return returnData;
         }
 
         @Override

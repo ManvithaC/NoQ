@@ -121,8 +121,7 @@
                 android:background="#3D4FB2"
                 android:text="Sign up as user"
                 android:textColor="@android:color/white"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textSize="17dp" />
 
             <Button
                 android:id="@+id/sign_up_as_admin_button"
@@ -134,8 +133,7 @@
                 android:background="#3D4FB2"
                 android:text="Sign Up as admin"
                 android:textColor="@android:color/white"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textSize="17dp" />
 
             <Button
                 android:id="@+id/or_signin_button"
