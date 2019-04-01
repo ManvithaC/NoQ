@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -104,7 +106,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         mSignUpAsAdminButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSignInActivity();
+                attemptLogin();
             }
         });
 
@@ -205,14 +207,14 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         }
 
         // Check for a valid first name, if the user entered one.
-        if (!TextUtils.isEmpty(firstname)) {
+        if (TextUtils.isEmpty(firstname)) {
             mFirstNameView.setError("Please enter a first name");
             focusView = mFirstNameView;
             cancel = true;
         }
 
-        // Check for a valid lastname, if the user entered one.
-        if (!TextUtils.isEmpty(lastname)) {
+        // Check if the user entered one.
+        if (TextUtils.isEmpty(lastname)) {
             mLastNameView.setError("Please enter a last name");
             focusView = mLastNameView;
             cancel = true;
@@ -220,7 +222,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            mEmailView.setError("Please enter a first name");
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
@@ -346,61 +348,48 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserSignUpTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserSignUpTask extends AsyncTask<Object, String, String> {
 
         private final String mEmail;
         private final String mPassword;
-        private final String mFirstname;
-        private final String mLastname;
+        private final String mFirstName;
+        private final String mLastName;
 
         UserSignUpTask(String email, String password, String firstname, String lastname) {
             mEmail = email;
             mPassword = password;
-            mFirstname = firstname;
-            mLastname = lastname;
+            mFirstName = firstname;
+            mLastName = lastname;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+        protected String doInBackground(Object... objects) {
+            HashMap<String, String> newUser = new HashMap<String, String>();
+            newUser.put("email", mEmail);
+            newUser.put("password", mPassword);
+            newUser.put("firstname", mFirstName);
+            newUser.put("lastname", mLastName);
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            String returnData ="";
 
+            String url = "https://wt-515a87db7f752d0a7fe8f6ce74d01d2c-0.sandbox.auth0-extend.com/sample";
+            PostUrl postUrl = new PostUrl();
             try {
-                System.out.println("------------");
-                System.out.println(getJSONData());
+                returnData = postUrl.postData(newUser, url);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        protected String getJSONData() throws IOException {
-
-            String url = "https://wt-515a87db7f752d0a7fe8f6ce74d01d2c-0.sandbox.auth0-extend.com/sample";
-            DownloadUrl downloadUrl = new DownloadUrl();
-            String returnData = downloadUrl.readUrl(url);
 
             return returnData;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(String result) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+            if(result == "created successfully"){
+                Log.d("post operation success", result);
             }
         }
 

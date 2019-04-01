@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mSignInAsAdminButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSignUpActivity();
+                attemptLogin();
             }
         });
 
@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mOrSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                getSignUpActivity();
             }
         });
 
