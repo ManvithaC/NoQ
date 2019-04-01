@@ -319,6 +319,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+    public void startNavActivity() {
+        Log.d("login", "starting nav activty");
+        Intent intent = new Intent(getApplicationContext(), NavActivity.class);
+        startActivity(intent);
+
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -354,9 +361,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            if(result == "authorized"){
-                Log.d("post execute", result);
-            }
+                Log.d("login", "authorized");
+                startNavActivity();
         }
 
         @Override
