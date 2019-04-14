@@ -372,7 +372,8 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
             String returnData ="";
 
-            String url = "https://wt-515a87db7f752d0a7fe8f6ce74d01d2c-0.sandbox.auth0-extend.com/sample";
+            String url = "https://wt-515a87db7f752d0a7fe8f6ce74d01d2c-0.sandbox.auth0-extend.com/express/signup";
+//            String url = "http://localhost:5000/signup";
             PostUrl postUrl = new PostUrl();
             try {
                 returnData = postUrl.postData(newUser, url);
