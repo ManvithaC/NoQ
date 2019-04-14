@@ -1,6 +1,8 @@
 package com.example.noq;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -20,18 +22,20 @@ import javax.net.ssl.HttpsURLConnection;
 public class PostUrl {
 
     public String postData(HashMap<String, String> newUser, String strUrl) throws IOException {
-        Log.d("post url", "***********");
-
-        String response = "";
+        String data = "";
         OutputStream iStream = null;
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(strUrl);
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.connect();
-            iStream = urlConnection.getOutputStream();
 
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod("POST");
+
+            urlConnection.setRequestProperty("content-type", "application/json; charset=utf-8");
+
+            iStream = urlConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(iStream, "UTF-8"));
 
             StringBuffer sb = new StringBuffer();
@@ -42,15 +46,16 @@ public class PostUrl {
 
             int responseCode=urlConnection.getResponseCode();
 
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
+            if (responseCode == HttpsURLConnection.HTTP_CREATED) {
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 while ((line=br.readLine()) != null) {
-                    response+=line;
+                    data+=line;
                 }
+                Log.d("result from post call", data);
             }
             else {
-                response="";
+                data="";
 
             }
 
@@ -60,23 +65,11 @@ public class PostUrl {
             iStream.close();
             urlConnection.disconnect();
         }
-        return response;
+        return data;
     }
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
+        Log.d("stringify payload", new JSONObject(params).toString());
+        return new JSONObject(params).toString();
     }
 }
