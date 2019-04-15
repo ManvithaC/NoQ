@@ -30,10 +30,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -345,7 +351,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String returnData ="";
 
-            String url = "http://localhost:5000/login?email="+mEmail+"&password="+mPassword;
+            String url = "http://192.168.1.73:5000/login?email="+mEmail+"&password="+mPassword;
             DownloadUrl downloadUrl = new DownloadUrl();
             try {
                 returnData = downloadUrl.readUrl(url);
@@ -354,16 +360,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 e.printStackTrace();
             }
 
+            Log.d("data from login", returnData);
             return returnData;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            DownloadUrl downloadUrl = new DownloadUrl();
+
             mAuthTask = null;
             showProgress(false);
 
+            Log.d("login response", String.valueOf(downloadUrl.getResponseCode()));
+            int login_responseCode = downloadUrl.getResponseCode();
+
+            if(login_responseCode == 200){
+                Map<String, String> loginData= null;
+
+                try {
+                    loginData = DownloadUrl.jsonToMap(result);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 Log.d("login", "authorized");
+                Log.d("isAdmin", loginData.get("role").toString());
                 startNavActivity();
+                Toast toast =  Toast.makeText(getApplicationContext(), "Logging in ...",
+                        Toast.LENGTH_LONG);
+                toast.show();
+            } else if( login_responseCode == 401 ){
+                Toast toast =  Toast.makeText(getApplicationContext(), "Incorrect username/password.",
+                        Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
 
         @Override
