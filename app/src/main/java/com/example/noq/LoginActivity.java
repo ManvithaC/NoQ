@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    public static String FIRSTNAME = "";
+    public static String LASTNAME = "";
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -325,12 +327,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    public void startNavActivity() {
-        Log.d("login", "starting nav activty");
-        Intent intent = new Intent(getApplicationContext(), NavActivity.class);
-        startActivity(intent);
-
-    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -383,9 +379,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     e.printStackTrace();
                 }
 
-                Log.d("login", "authorized");
                 Log.d("isAdmin", loginData.get("role").toString());
-                startNavActivity();
+
+                Log.d("login", "starting nav activty");
+                Intent intent = new Intent(getApplicationContext(), NavActivity.class);
+                intent.putExtra("firstname",loginData.get("firstname"));
+                intent.putExtra("lastname",loginData.get("lastname"));
+
+                FIRSTNAME = loginData.get("firstname");
+                LASTNAME = loginData.get("lastname");
+
+                startActivity(intent);
+
                 Toast toast =  Toast.makeText(getApplicationContext(), "Logging in ...",
                         Toast.LENGTH_LONG);
                 toast.show();
