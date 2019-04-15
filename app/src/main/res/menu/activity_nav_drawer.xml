@@ -7,19 +7,15 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="Open Camera" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@android:drawable/ic_lock_power_off"
+            android:title="Log out" />
     </group>
 
     <item android:title="Communicate">
@@ -28,10 +24,6 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
         </menu>
     </item>
 

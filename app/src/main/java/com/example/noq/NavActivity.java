@@ -1,8 +1,10 @@
 package com.example.noq;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +44,7 @@ public class NavActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -56,6 +61,9 @@ public class NavActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.nav, menu);
+        TextView username = (TextView)findViewById(R.id.username);
+        username.setText("Sup', "+ getIntent().getStringExtra("firstname")+" "
+                +getIntent().getStringExtra("lastname"));
         return true;
     }
 
@@ -82,16 +90,23 @@ public class NavActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_settings) {
+            Log.d("settings", "D");
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
 
-        } else if (id == R.id.nav_slideshow) {
+            intent.putExtra("firstname", getIntent().getStringExtra("firstname"));
+            intent.putExtra("lastname", getIntent().getStringExtra("lastname"));
 
-        } else if (id == R.id.nav_manage) {
+            startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_logout) {
 
-        } else if (id == R.id.nav_send) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
 
+            Toast toast =  Toast.makeText(getApplicationContext(), "Bye. See ya later!",
+                    Toast.LENGTH_LONG);
+            toast.show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
