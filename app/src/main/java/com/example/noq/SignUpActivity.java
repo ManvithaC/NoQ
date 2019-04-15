@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
     private EditText mPasswordView;
     private View mSignUpProgressView;
     private View mSignUpFormView;
+    private Boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptSignup();
                     return true;
                 }
                 return false;
@@ -98,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         mSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptSignup();
             }
         });
 
@@ -106,7 +108,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         mSignUpAsAdminButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                isAdmin = true;
             }
         });
 
@@ -177,11 +179,11 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptSignup() {
         if (mAuthTask != null) {
             return;
         }
@@ -369,14 +371,25 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             newUser.put("password", mPassword);
             newUser.put("firstname", mFirstName);
             newUser.put("lastname", mLastName);
+            if(isAdmin){
+                newUser.put("role", "admin");
+            } else {
+                newUser.put("role", "user");
+            }
 
             String returnData ="";
 
-            String url = "https://wt-515a87db7f752d0a7fe8f6ce74d01d2c-0.sandbox.auth0-extend.com/express/signup";
-//            String url = "http://localhost:5000/signup";
+            String url = "http://192.168.1.73:5000/signup";
             PostUrl postUrl = new PostUrl();
             try {
                 returnData = postUrl.postData(newUser, url);
+                Log.d("signup success", returnData);
+
+                getSignInActivity();
+                Toast toast =  Toast.makeText(getApplicationContext(), "Sign up successful. Please login...",
+                        Toast.LENGTH_LONG);
+                toast.show();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -389,8 +402,9 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             mAuthTask = null;
             showProgress(false);
 
-            if(result == "created successfully"){
-                Log.d("post operation success", result);
+            if(result == "Successful"){
+                Log.d("signup success", result);
+                getSignInActivity();
             }
         }
 

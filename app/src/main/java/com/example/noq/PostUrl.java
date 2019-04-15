@@ -21,6 +21,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class PostUrl {
 
+    private static int responseCode = 0;
+
     public String postData(HashMap<String, String> newUser, String strUrl) throws IOException {
         String data = "";
         OutputStream iStream = null;
@@ -44,7 +46,8 @@ public class PostUrl {
             writer.flush();
             writer.close();
 
-            int responseCode=urlConnection.getResponseCode();
+            responseCode=urlConnection.getResponseCode();
+            Log.d("responseCode post call", String.valueOf(responseCode));
 
             if (responseCode == HttpsURLConnection.HTTP_CREATED) {
                 String line;
@@ -52,7 +55,6 @@ public class PostUrl {
                 while ((line=br.readLine()) != null) {
                     data+=line;
                 }
-                Log.d("result from post call", data);
             }
             else {
                 data="";
@@ -65,7 +67,12 @@ public class PostUrl {
             iStream.close();
             urlConnection.disconnect();
         }
+        Log.d("response from post", data);
         return data;
+    }
+
+    public static int getResponseCode() {
+        return responseCode;
     }
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
