@@ -25,7 +25,7 @@
             android:label="@string/title_activity_sign_up" />
         <activity
             android:name=".LoginActivity"
-            android:label="Login ">
+            android:label="NoQ">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
