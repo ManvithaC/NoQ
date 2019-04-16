@@ -101,13 +101,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mSignInAsAdminButton = (Button) findViewById(R.id.sign_in_as_admin_button);
-        mSignInAsAdminButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+//        Button mSignInAsAdminButton = (Button) findViewById(R.id.sign_in_as_admin_button);
+//        mSignInAsAdminButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                attemptLogin();
+//            }
+//        });
 
         Button mOrSignUpButton = (Button) findViewById(R.id.or_signup_button);
         mOrSignUpButton.setOnClickListener(new OnClickListener() {
@@ -347,7 +347,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String returnData ="";
 
-            String url = "http://192.168.1.73:5000/login?email="+mEmail+"&password="+mPassword;
+            String url = "https://noqueue-app.herokuapp.com/login?email="+mEmail+"&password="+mPassword;
             DownloadUrl downloadUrl = new DownloadUrl();
             try {
                 returnData = downloadUrl.readUrl(url);
@@ -379,21 +379,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     e.printStackTrace();
                 }
 
-                Log.d("isAdmin", loginData.get("role").toString());
+                Log.d("isAdmin", loginData.get("role"));
 
-                Log.d("login", "starting nav activty");
-                Intent intent = new Intent(getApplicationContext(), NavActivity.class);
-                intent.putExtra("firstname",loginData.get("firstname"));
-                intent.putExtra("lastname",loginData.get("lastname"));
+                if(loginData.get("role").equals("admin")){
+                    Log.d("user role", "admin");
+                    Intent intent = new Intent(getApplicationContext(), AdminActivity.class);
+                    intent.putExtra("firstname",loginData.get("firstname"));
+                    intent.putExtra("lastname",loginData.get("lastname"));
 
-                FIRSTNAME = loginData.get("firstname");
-                LASTNAME = loginData.get("lastname");
+                    FIRSTNAME = loginData.get("firstname");
+                    LASTNAME = loginData.get("lastname");
 
-                startActivity(intent);
+                    startActivity(intent);
+                    Toast toast =  Toast.makeText(getApplicationContext(), "Logging in as admin...",
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
 
-                Toast toast =  Toast.makeText(getApplicationContext(), "Logging in ...",
-                        Toast.LENGTH_LONG);
-                toast.show();
+                    Log.d("login", "starting nav activty");
+                    Intent intent = new Intent(getApplicationContext(), NavActivity.class);
+                    intent.putExtra("firstname",loginData.get("firstname"));
+                    intent.putExtra("lastname",loginData.get("lastname"));
+
+                    FIRSTNAME = loginData.get("firstname");
+                    LASTNAME = loginData.get("lastname");
+
+                    startActivity(intent);
+                    Toast toast =  Toast.makeText(getApplicationContext(), "Logging in as user...",
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                }
+
             } else if( login_responseCode == 401 ){
                 Toast toast =  Toast.makeText(getApplicationContext(), "Incorrect username/password.",
                         Toast.LENGTH_LONG);

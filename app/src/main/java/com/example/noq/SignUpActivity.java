@@ -109,6 +109,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             @Override
             public void onClick(View view) {
                 isAdmin = true;
+                attemptSignup();
             }
         });
 
@@ -379,7 +380,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
             String returnData ="";
 
-            String url = "http://192.168.1.73:5000/signup";
+            String url = "https://noqueue-app.herokuapp.com/signup";
             PostUrl postUrl = new PostUrl();
             try {
                 returnData = postUrl.postData(newUser, url);
@@ -405,6 +406,10 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             if(result == "Successful"){
                 Log.d("signup success", result);
                 getSignInActivity();
+
+                Toast toast =  Toast.makeText(getApplicationContext(), "Sign up successful. Please login...",
+                        Toast.LENGTH_LONG);
+                toast.show();
             }
         }
 
