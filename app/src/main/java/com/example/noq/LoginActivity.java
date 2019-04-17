@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
     public static String FIRSTNAME = "";
     public static String LASTNAME = "";
+    public static String EMAIL = "";
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -192,6 +193,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+
+        EMAIL = email;
 
         boolean cancel = false;
         View focusView = null;
@@ -336,6 +339,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+
 
         UserLoginTask(String email, String password) {
             mEmail = email;
