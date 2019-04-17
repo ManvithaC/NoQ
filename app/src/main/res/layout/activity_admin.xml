@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
                 android:hint="Event Name"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
@@ -99,6 +99,31 @@
                 android:text="Locate me"
                 android:textColor="@android:color/white"
                 android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/event_id"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:hint="Unique Event ID"
+            android:layout_marginTop="20dp"
+            android:imeActionId="6"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/event_create_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="#3D4FB2"
+            android:text="Create"
+            android:textColor="@android:color/white"
+            android:textSize="17dp" />
 
     </LinearLayout>
 
