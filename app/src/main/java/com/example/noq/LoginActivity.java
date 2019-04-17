@@ -347,7 +347,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String returnData ="";
 
-            String url = "http://192.168.1.73:5000/login?email="+mEmail+"&password="+mPassword;
+            String url = "https://noqueue-app.herokuapp.com/login?email="+mEmail+"&password="+mPassword;
             DownloadUrl downloadUrl = new DownloadUrl();
             try {
                 returnData = downloadUrl.readUrl(url);
@@ -385,6 +385,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent intent = new Intent(getApplicationContext(), NavActivity.class);
                 intent.putExtra("firstname",loginData.get("firstname"));
                 intent.putExtra("lastname",loginData.get("lastname"));
+                intent.putExtra("email", mEmail);
 
                 FIRSTNAME = loginData.get("firstname");
                 LASTNAME = loginData.get("lastname");

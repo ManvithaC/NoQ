@@ -5,9 +5,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -22,6 +26,7 @@ public class DownloadUrl {
         Log.d("url", strUrl);
         String data = "";
 
+        OutputStream oStream = null;
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(strUrl);
@@ -61,7 +66,6 @@ public class DownloadUrl {
     }
 
     public static HashMap<String, String> jsonToMap(String t) throws JSONException {
-
         HashMap<String, String> map = new HashMap<String, String>();
         JSONObject jObject = new JSONObject(t);
         Iterator<?> keys = jObject.keys();
@@ -70,7 +74,6 @@ public class DownloadUrl {
             String key = (String)keys.next();
             String value = jObject.getString(key);
             map.put(key, value);
-
         }
 
         return map;
@@ -78,5 +81,10 @@ public class DownloadUrl {
 
     public static int getResponseCode() {
         return responseCode;
+    }
+
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+        Log.d("stringify payload", new JSONObject(params).toString());
+        return new JSONObject(params).toString();
     }
 }

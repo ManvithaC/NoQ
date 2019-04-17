@@ -24,6 +24,10 @@
             android:label="Home page"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".QueueActivity"
+            android:label="Home page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up" />
         <activity

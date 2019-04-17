@@ -1,7 +1,10 @@
 package com.example.noq;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -12,13 +15,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private GetPlacesTask mRunGetPlacesTask = null;
+
+    private  String placesData = null;
+
+    private String mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +68,10 @@ public class NavActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mRunGetPlacesTask = new GetPlacesTask();
+        mRunGetPlacesTask.execute((Void) null);
+
+        mEmail = getIntent().getStringExtra("email");
     }
 
     @Override
@@ -112,5 +139,80 @@ public class NavActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class GetPlacesTask extends AsyncTask<Object, String, String> {
+        private RecyclerView recyclerView;
+        private RecyclerView.Adapter mAdapter;
+        private RecyclerView.LayoutManager layoutManager;
+
+        public CoordinatorLayout coordinator_layout;
+
+        public void GetPlacesTask(RecyclerView recyclerView) {
+            this.recyclerView = recyclerView;
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+
+            String returnData ="";
+
+            String url = "https://noqueue-app.herokuapp.com/places";
+            DownloadUrl downloadUrl = new DownloadUrl();
+            try {
+                returnData = downloadUrl.readUrl(url);
+                Log.d("Response places data", returnData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d("data from Places API", returnData);
+            return returnData;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("Result", result);
+            DownloadUrl downloadUrl = new DownloadUrl();
+            mRunGetPlacesTask = null;
+            int get_places_responseCode = downloadUrl.getResponseCode();
+            if(get_places_responseCode == 200){
+                placesData = result;
+                Log.d("placesData", placesData == null ? "null" : placesData.toString());
+
+                coordinator_layout = findViewById(R.id.coordinator_layout);
+
+                recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+                layoutManager = new LinearLayoutManager(NavActivity.this);
+                recyclerView.setLayoutManager(layoutManager);
+                ArrayList<String> allPlaces = new ArrayList<>();
+
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    Log.d("jsonObject", jsonArray.toString());
+                    for(int i=0; i < jsonArray.length(); i++) {
+                        JSONObject jsonobject = jsonArray.getJSONObject(i);
+                        String placeDetails = jsonobject.getString("name") + ":"
+                                + jsonobject.getString("placeId") + ":"
+                                + mEmail ;
+                        allPlaces.add(placeDetails);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mAdapter = new RecyclerAdapter((ArrayList<String>)allPlaces);
+                recyclerView.setAdapter(mAdapter);
+            }
+            if(get_places_responseCode == 401){
+                Toast toast =  Toast.makeText(getApplicationContext(), "Error occured",
+                        Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+        }
     }
 }

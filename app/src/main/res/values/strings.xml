@@ -95,4 +95,7 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="join_queue">Join Queue</string>
+    <string name="wait_time">Wait Time :</string>
+    <string name="value">Value</string>
 </resources>
