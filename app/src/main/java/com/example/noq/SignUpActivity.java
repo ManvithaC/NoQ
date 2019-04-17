@@ -379,7 +379,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
             String returnData ="";
 
-            String url = "http://192.168.1.73:5000/signup";
+            String url = "https://noqueue-app.herokuapp.com/signup";
             PostUrl postUrl = new PostUrl();
             try {
                 returnData = postUrl.postData(newUser, url);

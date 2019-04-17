@@ -107,6 +107,11 @@ public class NavActivity extends AppCompatActivity
             Toast toast =  Toast.makeText(getApplicationContext(), "Bye. See ya later!",
                     Toast.LENGTH_LONG);
             toast.show();
+        } else if (id == R.id.nav_scan) {
+
+            Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
