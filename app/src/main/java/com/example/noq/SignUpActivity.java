@@ -109,6 +109,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             @Override
             public void onClick(View view) {
                 isAdmin = true;
+                attemptSignup();
             }
         });
 
@@ -405,6 +406,10 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             if(result == "Successful"){
                 Log.d("signup success", result);
                 getSignInActivity();
+
+                Toast toast =  Toast.makeText(getApplicationContext(), "Sign up successful. Please login...",
+                        Toast.LENGTH_LONG);
+                toast.show();
             }
         }
 

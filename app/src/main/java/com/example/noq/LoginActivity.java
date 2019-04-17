@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
     public static String FIRSTNAME = "";
     public static String LASTNAME = "";
+    public static String EMAIL = "";
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -101,13 +102,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mSignInAsAdminButton = (Button) findViewById(R.id.sign_in_as_admin_button);
-        mSignInAsAdminButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+//        Button mSignInAsAdminButton = (Button) findViewById(R.id.sign_in_as_admin_button);
+//        mSignInAsAdminButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                attemptLogin();
+//            }
+//        });
 
         Button mOrSignUpButton = (Button) findViewById(R.id.or_signup_button);
         mOrSignUpButton.setOnClickListener(new OnClickListener() {
@@ -192,6 +193,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+
+        EMAIL = email;
 
         boolean cancel = false;
         View focusView = null;
@@ -337,6 +340,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
 
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -379,22 +383,38 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     e.printStackTrace();
                 }
 
-                Log.d("isAdmin", loginData.get("role").toString());
+                Log.d("isAdmin", loginData.get("role"));
 
-                Log.d("login", "starting nav activty");
-                Intent intent = new Intent(getApplicationContext(), NavActivity.class);
-                intent.putExtra("firstname",loginData.get("firstname"));
-                intent.putExtra("lastname",loginData.get("lastname"));
-                intent.putExtra("email", mEmail);
+                if(loginData.get("role").equals("admin")){
+                    Log.d("user role", "admin");
+                    Intent intent = new Intent(getApplicationContext(), AdminActivity.class);
+                    intent.putExtra("firstname",loginData.get("firstname"));
+                    intent.putExtra("lastname",loginData.get("lastname"));
 
-                FIRSTNAME = loginData.get("firstname");
-                LASTNAME = loginData.get("lastname");
+                    FIRSTNAME = loginData.get("firstname");
+                    LASTNAME = loginData.get("lastname");
 
-                startActivity(intent);
+                    startActivity(intent);
+                    Toast toast =  Toast.makeText(getApplicationContext(), "Logging in as admin...",
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
 
-                Toast toast =  Toast.makeText(getApplicationContext(), "Logging in ...",
-                        Toast.LENGTH_LONG);
-                toast.show();
+                    Log.d("login", "starting nav activty");
+                    Intent intent = new Intent(getApplicationContext(), NavActivity.class);
+                    intent.putExtra("firstname",loginData.get("firstname"));
+                    intent.putExtra("lastname",loginData.get("lastname"));
+                    intent.putExtra("email", mEmail);
+
+                    FIRSTNAME = loginData.get("firstname");
+                    LASTNAME = loginData.get("lastname");
+
+                    startActivity(intent);
+                    Toast toast =  Toast.makeText(getApplicationContext(), "Logging in as user...",
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                }
+
             } else if( login_responseCode == 401 ){
                 Toast toast =  Toast.makeText(getApplicationContext(), "Incorrect username/password.",
                         Toast.LENGTH_LONG);
