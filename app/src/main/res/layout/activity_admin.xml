@@ -45,12 +45,14 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+        </android.support.design.widget.TextInputLayout>
 
             <EditText
                 android:id="@+id/event_name"
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
                 android:hint="Event Name"
+                android:layout_marginTop="5dp"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
@@ -58,7 +60,45 @@
                 android:maxLines="1"
                 android:singleLine="true" />
 
-        </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/lat_name"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="Longitude"
+                android:layout_marginTop="5dp"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/long_name"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="Latitude"
+                android:layout_marginTop="5dp"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+
+            <Button
+                android:id="@+id/locate_me_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="#3D4FB2"
+                android:text="Locate me"
+                android:textColor="@android:color/white"
+                android:textSize="17dp" />
 
     </LinearLayout>
 
