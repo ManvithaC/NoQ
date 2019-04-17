@@ -29,6 +29,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/admin_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -36,7 +44,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout
-        android:id="@+id/email_login_form"
+        android:id="@+id/admin_create_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
@@ -48,10 +56,10 @@
         </android.support.design.widget.TextInputLayout>
 
             <EditText
-                android:id="@+id/event_name"
+                android:id="@+id/place_name"
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
-                android:hint="Event Name"
+                android:hint="Place Name"
                 android:layout_marginTop="20dp"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -61,7 +69,7 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/lat_name"
+                android:id="@+id/place_lat"
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
                 android:hint="Longitude"
@@ -74,7 +82,7 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/long_name"
+                android:id="@+id/place_long"
                 android:layout_width="match_parent"
                 android:layout_height="79dp"
                 android:hint="Latitude"
@@ -101,7 +109,7 @@
                 android:textSize="17dp" />
 
         <EditText
-            android:id="@+id/event_id"
+            android:id="@+id/place_id"
             android:layout_width="match_parent"
             android:layout_height="79dp"
             android:hint="Unique Event ID"
