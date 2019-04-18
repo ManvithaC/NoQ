@@ -395,9 +395,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     LASTNAME = loginData.get("lastname");
 
                     startActivity(intent);
-                    Toast toast =  Toast.makeText(getApplicationContext(), "Logging in as admin...",
-                            Toast.LENGTH_LONG);
-                    toast.show();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Logging in as admin...",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } else {
 
                     Log.d("login", "starting nav activty");
@@ -410,15 +413,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     LASTNAME = loginData.get("lastname");
 
                     startActivity(intent);
-                    Toast toast =  Toast.makeText(getApplicationContext(), "Logging in as user...",
-                            Toast.LENGTH_LONG);
-                    toast.show();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Logging in as user...",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
             } else if( login_responseCode == 401 ){
-                Toast toast =  Toast.makeText(getApplicationContext(), "Incorrect username/password.",
-                        Toast.LENGTH_LONG);
-                toast.show();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Incorrect username/password",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
             }
         }
 

@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Open Camera" />
         <item
+            android:id="@+id/nav_scan"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Scan QR Code" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
             android:title="Settings" />

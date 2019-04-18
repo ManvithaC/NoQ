@@ -151,7 +151,7 @@ public class QueueActivity extends AppCompatActivity {
             try {
                 returnData = postUrl.postData(newUser, url);
                 Log.d("Add to Queue success", returnData);
-
+              
                 runOnUiThread(new Runnable(){
                     public void run() {
                         Toast.makeText(mActivity.getApplicationContext(), "You're successfully added to the queue." , Toast.LENGTH_LONG).show();

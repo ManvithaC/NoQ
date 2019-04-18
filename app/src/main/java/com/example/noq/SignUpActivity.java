@@ -3,6 +3,7 @@ package com.example.noq;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.os.AsyncTask;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -14,7 +15,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -138,10 +138,6 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         startActivity(intent);
     }
 
-    private void getSignUpAsAdminActivity() {
-//        Intent intent = new Intent(this, LoginActivity.class);
-//        startActivity(intent);
-    }
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -386,11 +382,6 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
                 returnData = postUrl.postData(newUser, url);
                 Log.d("signup success", returnData);
 
-                getSignInActivity();
-                Toast toast =  Toast.makeText(getApplicationContext(), "Sign up successful. Please login...",
-                        Toast.LENGTH_LONG);
-                toast.show();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -403,13 +394,22 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             mAuthTask = null;
             showProgress(false);
 
-            if(result == "Successful"){
+            if(result.equals("Successful")){
                 Log.d("signup success", result);
                 getSignInActivity();
-
-                Toast toast =  Toast.makeText(getApplicationContext(), "Sign up successful. Please login...",
-                        Toast.LENGTH_LONG);
-                toast.show();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Sign up successful. Please login...",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else if(result.equals("Error occured!")){
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Something is wrong! Please try again...",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         }
 

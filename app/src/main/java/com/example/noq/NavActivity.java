@@ -1,5 +1,6 @@
 package com.example.noq;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -134,6 +135,11 @@ public class NavActivity extends AppCompatActivity
             Toast toast =  Toast.makeText(getApplicationContext(), "Bye. See ya later!",
                     Toast.LENGTH_LONG);
             toast.show();
+        } else if (id == R.id.nav_scan) {
+
+            Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -174,6 +180,7 @@ public class NavActivity extends AppCompatActivity
             return returnData;
         }
 
+        @SuppressLint("CutPasteId")
         @Override
         protected void onPostExecute(String result) {
             Log.d("Result", result);
@@ -208,9 +215,12 @@ public class NavActivity extends AppCompatActivity
                 recyclerView.setAdapter(mAdapter);
             }
             if(get_places_responseCode == 401){
-                Toast toast =  Toast.makeText(getApplicationContext(), "Error occured",
-                        Toast.LENGTH_LONG);
-                toast.show();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Something seems to be wrong!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
         }
