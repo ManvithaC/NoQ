@@ -387,7 +387,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 if(loginData.get("role").equals("admin")){
                     Log.d("user role", "admin");
-                    Intent intent = new Intent(getApplicationContext(), AdminActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), adminDashboardActivity.class);
                     intent.putExtra("firstname",loginData.get("firstname"));
                     intent.putExtra("lastname",loginData.get("lastname"));
 

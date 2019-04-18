@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.noq">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -14,6 +13,7 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Access to camera -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -25,18 +25,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".queueListActivity"
-            android:label="@string/title_queue_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".queueDetailActivity"
-            android:label="@string/title_queue_detail"
-            android:parentActivityName=".queueListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.noq.queueListActivity" />
-        </activity>
+            android:name=".adminDashboardActivity"
+            android:label="Admin Dashboard"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
