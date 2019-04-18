@@ -138,6 +138,7 @@ public class NavActivity extends AppCompatActivity
         } else if (id == R.id.nav_scan) {
 
             Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+            intent.putExtra("email", getIntent().getStringExtra("email"));
             startActivity(intent);
 
         }
