@@ -26,19 +26,6 @@
         <activity
             android:name=".adminDashboardActivity"
             android:label="Admin Dashboard"></activity>
-        <activity
-            android:name=".queueListActivity"
-            android:label="Queues Created"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".queueDetailActivity"
-            android:label="Queue detail"
-            android:parentActivityName=".queueListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.noq.queueListActivity" />
-        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

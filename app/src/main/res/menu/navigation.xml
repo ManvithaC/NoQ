@@ -9,12 +9,12 @@
     <item
         android:id="@+id/navigation_queues"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:title="Queues List" />
 
     <item
         android:id="@+id/navigation_create"
         android:icon="@drawable/ic_menu_send"
-        android:title="Queues" />
+        android:title="Create Queue" />
 
     <item
         android:id="@+id/navigation_settings"
