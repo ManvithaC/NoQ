@@ -102,4 +102,8 @@
     <string name="value">Value</string>
     <string name="title_queue_list">Items</string>
     <string name="title_queue_detail">queue Detail</string>
+    <string name="title_activity_admin_dashboard">adminDashboardActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

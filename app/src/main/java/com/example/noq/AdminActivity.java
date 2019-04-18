@@ -243,12 +243,7 @@ public class AdminActivity extends AppCompatActivity {
                 Log.d("Place creation success", result);
                 Snackbar.make(mAdminFormView, "Place created successfully.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-//                runOnUiThread(new Runnable() {
-//                    public void run() {
-//                        Toast.makeText(getApplicationContext(), "Place Creation successful.",
-//                                Toast.LENGTH_LONG).show();
-//                    }
-//                });
+
             } else if(result.equals("Error occured!")){
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -282,8 +277,7 @@ public class AdminActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getApplicationContext(), queueListActivity.class);
-            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
