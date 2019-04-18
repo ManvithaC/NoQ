@@ -116,9 +116,7 @@ public class NavActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_settings) {
+        if (id == R.id.nav_settings) {
             Log.d("settings", "D");
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
 
