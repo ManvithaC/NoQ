@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 
 public class AdminActivity extends AppCompatActivity {
 
+    private PlaceCreateTask mAuthTask = null;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -42,7 +44,6 @@ public class AdminActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private PlaceCreateTask mAuthTask = null;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -80,9 +81,6 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-        mAdminProgressView = findViewById(R.id.admin_create_form);
-        mAdminFormView = findViewById(R.id.admin_progress);
-
         Button mLocateMeButton = (Button) findViewById(R.id.locate_me_button);
         mLocateMeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,85 +104,59 @@ public class AdminActivity extends AppCompatActivity {
         mPlaceLatitude = (EditText) findViewById(R.id.place_lat);
         mPlaceLongitude = (EditText) findViewById(R.id.place_long);
         mPlaceId = (EditText) findViewById(R.id.place_id);
+
+        mAdminFormView = findViewById(R.id.admin_create_form);
+        mAdminProgressView = findViewById(R.id.admin_progress);
     }
 
     private void postPlaceDetailsToServer(){
         if (mAuthTask != null) {
             return;
         }
+
+        boolean cancel = false;
+        View focusView = null;
+
         String placeName = mPlaceName.getText().toString();
         String placeLat = mPlaceLatitude.getText().toString();
         String placeLong = mPlaceLongitude.getText().toString();
         String placeId = mPlaceId.getText().toString();
 
-        mAuthTask = new PlaceCreateTask(placeName, placeLat, placeLong, placeId );
-        mAuthTask.execute((Void) null);
-    }
-
-    public class PlaceCreateTask extends AsyncTask<Object, String, String> {
-
-        private final String mPlaceName;
-        private final String mPlaceLatitude;
-        private final String mPlaceLongitude;
-        private final String mPlaceId;
-
-        PlaceCreateTask(String placeName, String placeLat, String placeLong, String placeId) {
-            mPlaceName = placeName;
-            mPlaceLatitude = placeLat;
-            mPlaceLongitude = placeLong;
-            mPlaceId = placeId;
+        // Check if the user entered one.
+        if (TextUtils.isEmpty(placeName)) {
+            mPlaceName.setError("Please enter a place name");
+            focusView = mPlaceName;
+            cancel = true;
         }
 
-        @Override
-        protected String doInBackground(Object... objects) {
-            HashMap<String, String> newPlace = new HashMap<String, String>();
-            newPlace.put("email", LoginActivity.EMAIL);
-            newPlace.put("name", mPlaceName);
-            newPlace.put("placeId", mPlaceId);
-            newPlace.put("latitude", mPlaceLatitude);
-            newPlace.put("longitude", mPlaceLongitude);
-
-            String returnData ="";
-
-            String url = "https://noqueue-app.herokuapp.com/places";
-            PostUrl postUrl = new PostUrl();
-            try {
-                returnData = postUrl.postData(newPlace, url);
-                Log.d("post new place success", returnData);
-
-                Snackbar.make(mAdminFormView, "Queue created successfully.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return returnData;
+        if (TextUtils.isEmpty(placeLat)) {
+            mPlaceLatitude.setError("Please enter latitude");
+            focusView = mPlaceLatitude;
+            cancel = true;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if(result == "Successful"){
-                Log.d("Place creation success", result);
-
-                Toast toast =  Toast.makeText(getApplicationContext(), "Place creation successful.",
-                        Toast.LENGTH_LONG);
-                toast.show();
-            }
+        if (TextUtils.isEmpty(placeLong)) {
+            mPlaceLongitude.setError("Please enter a longitude");
+            focusView = mPlaceLongitude;
+            cancel = true;
         }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            Log.d("auth task", "executing task");
+            mAuthTask = new PlaceCreateTask(placeName, placeLat, placeLong, placeId );
+            mAuthTask.execute((Void) null);
         }
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the admin form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -216,6 +188,81 @@ public class AdminActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mAdminProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mAdminFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    public class PlaceCreateTask extends AsyncTask<Object, String, String> {
+
+        private final String mPlaceName;
+        private final String mPlaceLatitude;
+        private final String mPlaceLongitude;
+        private final String mPlaceId;
+
+        PlaceCreateTask(String placeName, String placeLat, String placeLong, String placeId) {
+            mPlaceName = placeName;
+            mPlaceLatitude = placeLat;
+            mPlaceLongitude = placeLong;
+            mPlaceId = placeId;
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            HashMap<String, String> newPlace = new HashMap<String, String>();
+            newPlace.put("email", LoginActivity.EMAIL);
+            newPlace.put("name", mPlaceName);
+            newPlace.put("placeId", mPlaceId);
+            newPlace.put("latitude", mPlaceLatitude);
+            newPlace.put("longitude", mPlaceLongitude);
+
+            String returnData ="";
+
+            String url = "https://noqueue-app.herokuapp.com/places";
+//            String url = "http://192.168.1.73:5000/places";
+            PostUrl postUrl = new PostUrl();
+            try {
+                returnData = postUrl.postData(newPlace, url);
+                Log.d("post new place success", returnData);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return returnData;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mAuthTask = null;
+            showProgress(false);
+
+            Log.d("post place", result);
+
+            Log.d("success", "posting a place");
+
+            if(result.equals("Successful")){
+                Log.d("Place creation success", result);
+                Snackbar.make(mAdminFormView, "Place created successfully.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        Toast.makeText(getApplicationContext(), "Place Creation successful.",
+//                                Toast.LENGTH_LONG).show();
+//                    }
+//                });
+            } else if(result.equals("Error occured!")){
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Something is wrong! Please try again...",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
         }
     }
 
