@@ -147,7 +147,7 @@ public class QueueActivity extends AppCompatActivity {
                 returnData = postUrl.postData(newUser, url);
                 Log.d("Add to Queue success", returnData);
 
-                Toast toast =  Toast.makeText(parent.getBaseContext(), "You're successfully added to the queue.",
+                Toast toast =  Toast.makeText(getApplicationContext(), "You're successfully added to the queue.",
                         Toast.LENGTH_LONG);
                 toast.show();
 
