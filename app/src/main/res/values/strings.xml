@@ -100,4 +100,6 @@
     <string name="join_queue">Join Queue</string>
     <string name="wait_time">Wait Time :</string>
     <string name="value">Value</string>
+    <string name="title_queue_list">Items</string>
+    <string name="title_queue_detail">queue Detail</string>
 </resources>
