@@ -44,6 +44,7 @@ public class AdminActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    public static final int REQUEST_CODE = 1;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -87,7 +88,7 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d("button click", "locate button clicked");
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -107,6 +108,28 @@ public class AdminActivity extends AppCompatActivity {
 
         mAdminFormView = findViewById(R.id.admin_create_form);
         mAdminProgressView = findViewById(R.id.admin_progress);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("result", String.valueOf(resultCode));
+            Log.d("lat", String.valueOf(data.getDoubleExtra("admin_latitude", 2)));
+
+            if (requestCode == REQUEST_CODE  && resultCode  == RESULT_OK) {
+                Log.d("result received", "in result-----");
+                double admin_latitude = data.getDoubleExtra("admin_latitude", 2);
+                double admin_longitude = data.getDoubleExtra("admin_longitude", 2);
+
+                mPlaceLatitude.setText(String.valueOf(admin_latitude));
+                mPlaceLongitude.setText(String.valueOf(admin_longitude));
+            }
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), ex.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void postPlaceDetailsToServer(){

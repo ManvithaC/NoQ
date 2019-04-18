@@ -1,5 +1,6 @@
 package com.example.noq;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -8,6 +9,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SearchView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,6 +27,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -33,6 +40,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final String TAG = MapsActivity.class.getSimpleName();
 
+    // A default location (Sydney, Australia) and default zoom to use when location permission is
+    // not granted.
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -41,6 +50,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
+    private SearchView simpleSearchView;
+    private double admin_latitude ;
+    private double admin_longitude ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +63,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Construct a GeoDataClient.
-        mGeoDataClient = Places.getGeoDataClient(this, null);
-
-        // Construct a PlaceDetectionClient.
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
-
-        // Construct a FusedLocationProviderClient.
+        mGeoDataClient = Places.getGeoDataClient(this);
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        simpleSearchView = (SearchView) findViewById(R.id.search_view);
+
+        Button ok_button = (Button) findViewById(R.id.map_ok_button);
+        ok_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                admin_latitude = mLastKnownLocation.getLatitude();
+                admin_longitude = mLastKnownLocation.getLongitude();
+
+                Intent intent = getIntent();
+                intent.putExtra("admin_latitude", admin_latitude);
+                intent.putExtra("admin_longitude", admin_longitude);
+                setResult(RESULT_OK, intent);
+                finish();
+
+            }
+        });
     }
 
 
@@ -85,6 +110,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+    }
+
+    private String getURL(double latitude, double longitude, int radius, String query) {
+        String baseURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+
+                ","+longitude+"&radius="+radius+"&keyword="+query+"&key=AIzaSyAUYReg4otilAWHy7EmqpIA372qkXkARQI";
+
+        return baseURL;
     }
 
     private void getLocationPermission() {
@@ -158,6 +190,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude())).title("You are here"));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
