@@ -13,6 +13,7 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.json.JSONException;
 
 public class QueueActivity extends AppCompatActivity {
@@ -28,6 +29,8 @@ public class QueueActivity extends AppCompatActivity {
     private GetQueueTask mGetQueueTask = null;
 
     private JoinQueueTask mJoinQueueTask = null;
+
+    private QueueActivity parent = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class QueueActivity extends AppCompatActivity {
         joinQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mJoinQueueTask = new JoinQueueTask(userId, placeId);
+                mJoinQueueTask = new JoinQueueTask(userId, placeId, parent);
                 mJoinQueueTask.execute((Void) null);
             }
         });
@@ -127,10 +130,12 @@ public class QueueActivity extends AppCompatActivity {
 
         private final String mEmail;
         private final String mPlaceId;
+        private  final QueueActivity mActivity;
 
-        JoinQueueTask(String email, String placeId) {
+        JoinQueueTask(String email, String placeId, QueueActivity activity) {
             mEmail = email;
             mPlaceId = placeId;
+            this.mActivity = activity;
         }
 
         @Override
@@ -146,11 +151,12 @@ public class QueueActivity extends AppCompatActivity {
             try {
                 returnData = postUrl.postData(newUser, url);
                 Log.d("Add to Queue success", returnData);
-
-                Toast toast =  Toast.makeText(getApplicationContext(), "You're successfully added to the queue.",
-                        Toast.LENGTH_LONG);
-                toast.show();
-
+              
+                runOnUiThread(new Runnable(){
+                    public void run() {
+                        Toast.makeText(mActivity.getApplicationContext(), "You're successfully added to the queue." , Toast.LENGTH_LONG).show();
+                    }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
