@@ -282,8 +282,7 @@ public class AdminActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getApplicationContext(), queueListActivity.class);
-            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
