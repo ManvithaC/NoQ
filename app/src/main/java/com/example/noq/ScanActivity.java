@@ -59,8 +59,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         final String placeId = result.getText();
         userId = getIntent().getStringExtra("email");
         Log.i("userID", userId);
-//        mJoinQueueTask = new JoinQueueTaskScan(userId, placeId, parent);
-//        mJoinQueueTask.execute((Void) null);
+        mJoinQueueTask = new JoinQueueTaskScan(userId, placeId, parent);
+        mJoinQueueTask.execute((Void) null);
 
         createNotification(userId, placeId, parent.getApplicationContext());
 
