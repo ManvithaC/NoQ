@@ -20,17 +20,21 @@ public class QueueActivity extends AppCompatActivity {
 
     private TextView cafeAddress, cafeName;
 
-    private TextView waitTime, queueLength;
+    private TextView waitTime, queueLength, queuePositionKey, queuePositionValue;
 
     private Button joinQueue;
 
     private String userId;
+
+    private String placeId;
 
     private GetQueueTask mGetQueueTask = null;
 
     private JoinQueueTask mJoinQueueTask = null;
 
     private QueueActivity parent = this;
+
+    private int queuePosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,14 +47,14 @@ public class QueueActivity extends AppCompatActivity {
         queueLength = (TextView) findViewById(R.id.tvQueueSizeValue);
         joinQueue = (Button) findViewById(R.id.btnJoinQueue);
 
-        final String placeId = getIntent().getStringExtra("placeId");
+        placeId = getIntent().getStringExtra("placeId");
         String placeName = getIntent().getStringExtra("placeName");
         userId = getIntent().getStringExtra("email");
 
         cafeAddress.setText(placeId);
         cafeName.setText(placeName);
 
-        mGetQueueTask = new GetQueueTask(placeId);
+        mGetQueueTask = new GetQueueTask(placeId, userId);
         mGetQueueTask.execute((Void) null);
 
         joinQueue.setOnClickListener(new View.OnClickListener() {
@@ -69,17 +73,20 @@ public class QueueActivity extends AppCompatActivity {
      */
     public class GetQueueTask extends AsyncTask<Object, String, String> {
 
-        private final String mPlaceId;
+        private final String mPlaceId, mUserId;
 
-        public GetQueueTask(String placeId) {
+        public GetQueueTask(String placeId, String userId) {
+
             mPlaceId = placeId;
+
+            mUserId = userId;
         }
 
         @Override
         protected String doInBackground(Object... objects) {
             String returnData ="";
 
-            String url = "https://noqueue-app.herokuapp.com/queues?placeId="+mPlaceId;
+            String url = "https://noqueue-app.herokuapp.com/queues?placeId="+mPlaceId+"&userId="+mUserId;
             DownloadUrl downloadUrl = new DownloadUrl();
             try {
                 returnData = downloadUrl.readUrl(url);
@@ -97,6 +104,10 @@ public class QueueActivity extends AppCompatActivity {
             Log.d("Result", result);
             DownloadUrl downloadUrl = new DownloadUrl();
 
+            queuePositionKey = (TextView) findViewById(R.id.tvQueuePositionKey);
+            queuePositionValue = (TextView) findViewById(R.id.tvQueuePositionValue);
+
+
             int get_places_responseCode = downloadUrl.getResponseCode();
             if(get_places_responseCode == 200){
                 Log.d("Positive - Result", result);
@@ -111,6 +122,18 @@ public class QueueActivity extends AppCompatActivity {
                 Log.d("Map - Result", queueData.get("waitTime"));
                 waitTime.setText(queueData.get("waitTime"));
                 queueLength.setText(queueData.get("queueLength"));
+
+                if(queueData.get("queuePosition") != null)
+                {
+                    Log.d("Queue Position", queueData.get("queuePosition"));
+                    queuePosition = Integer.parseInt(queueData.get("queuePosition"));
+                    queuePositionKey.setVisibility(View.VISIBLE);
+                    queuePositionValue.setText(String.valueOf(queuePosition));
+                    queuePositionValue.setVisibility(View.VISIBLE);
+                    joinQueue.setText("UNJOIN QUEUE");
+                } else {
+                    queuePosition = Integer.parseInt(queueData.get("queueLength"))+1;
+                }
             }
             if(get_places_responseCode == 401){
                 Toast toast =  Toast.makeText(getApplicationContext(), "Error occured",
@@ -167,6 +190,19 @@ public class QueueActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mJoinQueueTask = null;
+
+            queuePositionKey = (TextView) findViewById(R.id.tvQueuePositionKey);
+            queuePositionValue = (TextView) findViewById(R.id.tvQueuePositionValue);
+            joinQueue = (Button) findViewById(R.id.btnJoinQueue);
+
+            queueLength.setText(String.valueOf(queuePosition));
+
+            queuePositionKey.setVisibility(View.VISIBLE);
+            queuePositionValue.setText(String.valueOf(queuePosition));
+            queuePositionValue.setVisibility(View.VISIBLE);
+
+            joinQueue.setText("UNJOIN QUEUE");
+
             if(result == "Successful"){
                 Log.d("Add User success", result);
             }
