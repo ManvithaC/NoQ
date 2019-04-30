@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
+import android.content.Intent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,9 +33,13 @@ public class QueueActivity extends AppCompatActivity {
 
     private JoinQueueTask mJoinQueueTask = null;
 
+    private UnJoinQueueTask mUnJoinQueueTask = null;
+
     private QueueActivity parent = this;
 
     private int queuePosition;
+
+    private boolean userJoinedQueue = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,8 +65,13 @@ public class QueueActivity extends AppCompatActivity {
         joinQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mJoinQueueTask = new JoinQueueTask(userId, placeId, parent);
-                mJoinQueueTask.execute((Void) null);
+                if(!userJoinedQueue) {
+                    mJoinQueueTask = new JoinQueueTask(userId, placeId, parent);
+                    mJoinQueueTask.execute((Void) null);
+                } else {
+                    mUnJoinQueueTask = new UnJoinQueueTask(userId, placeId, parent);
+                    mUnJoinQueueTask.execute((Void) null);
+                }
             }
         });
     }
@@ -131,6 +141,7 @@ public class QueueActivity extends AppCompatActivity {
                     queuePositionValue.setText(String.valueOf(queuePosition));
                     queuePositionValue.setVisibility(View.VISIBLE);
                     joinQueue.setText("UNJOIN QUEUE");
+                    userJoinedQueue = true;
                 } else {
                     queuePosition = Integer.parseInt(queueData.get("queueLength"))+1;
                 }
@@ -173,7 +184,7 @@ public class QueueActivity extends AppCompatActivity {
             PostUrl postUrl = new PostUrl();
             try {
                 returnData = postUrl.postData(newUser, url);
-                Log.d("Add to Queue success", returnData);
+                Log.d("Join Queue success", returnData);
               
                 runOnUiThread(new Runnable(){
                     public void run() {
@@ -202,6 +213,67 @@ public class QueueActivity extends AppCompatActivity {
             queuePositionValue.setVisibility(View.VISIBLE);
 
             joinQueue.setText("UNJOIN QUEUE");
+
+            userJoinedQueue = true;
+
+            if(result == "Successful"){
+                Log.d("Add User success", result);
+            }
+        }
+
+    }
+
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class UnJoinQueueTask extends AsyncTask<Object, String, String> {
+
+        private final String mEmail;
+        private final String mPlaceId;
+        private  final QueueActivity mActivity;
+
+        UnJoinQueueTask(String email, String placeId, QueueActivity activity) {
+            mEmail = email;
+            mPlaceId = placeId;
+            this.mActivity = activity;
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            HashMap<String, String> removeUser = new HashMap<String, String>();
+            removeUser.put("userId", mEmail);
+            removeUser.put("placeId", mPlaceId);
+
+            String returnData ="";
+
+            String url = "https://noqueue-app.herokuapp.com/queues/removeUser";
+            PostUrl postUrl = new PostUrl();
+            try {
+                returnData = postUrl.postData(removeUser, url);
+                Log.d("Unjoin Queue success", returnData);
+
+                runOnUiThread(new Runnable(){
+                    public void run() {
+                        Toast.makeText(mActivity.getApplicationContext(), "You exited the queue." , Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return returnData;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mJoinQueueTask = null;
+
+            userJoinedQueue = false;
+
+            finish();
+            startActivity(getIntent());
 
             if(result == "Successful"){
                 Log.d("Add User success", result);
