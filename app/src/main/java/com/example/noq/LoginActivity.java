@@ -390,6 +390,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Intent intent = new Intent(getApplicationContext(), adminDashboardActivity.class);
                     intent.putExtra("firstname",loginData.get("firstname"));
                     intent.putExtra("lastname",loginData.get("lastname"));
+                    intent.putExtra("email", mEmail);
 
                     FIRSTNAME = loginData.get("firstname");
                     LASTNAME = loginData.get("lastname");

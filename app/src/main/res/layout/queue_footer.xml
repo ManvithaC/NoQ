@@ -11,7 +11,7 @@
         android:id="@+id/btnJoinQueue"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/colorPrimary"
+        android:background="#3D4FB2"
         android:text="@string/join_queue"
         android:textColor="@android:color/white"
         android:textSize="20sp"

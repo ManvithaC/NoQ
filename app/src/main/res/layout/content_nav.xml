@@ -18,13 +18,6 @@ tools:showIn="@layout/app_bar_nav">
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:scrollbars="vertical" />
-
-          <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/fragment_container"
-              android:layout_width="412dp"
-              android:layout_height="69dp"
-              android:layout_above="@+id/my_recycler_view"
-              android:layout_marginBottom="-607dp" />
      </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -26,6 +26,9 @@ public class adminDashboardActivity extends AppCompatActivity {
                     mTextMessage.setText("Hello "+FIRSTNAME+" "+LASTNAME);
                     return true;
                 case R.id.navigation_queues:
+                    Intent adminViewIntent = new Intent(getApplicationContext(), MyPlacesActivity.class);
+                    adminViewIntent.putExtra("email", getIntent().getStringExtra("email"));
+                    startActivity(adminViewIntent);
                     return true;
                 case R.id.navigation_create:
                     Intent intent = new Intent(getApplicationContext(), AdminActivity.class);

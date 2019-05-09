@@ -61,6 +61,14 @@
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up" />
         <activity
+            android:name=".MyPlacesActivity"
+            android:label="Home page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PlaceActivity"
+            android:label="Home page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".LoginActivity"
             android:label="NoQ">
             <intent-filter>

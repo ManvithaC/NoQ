@@ -3,9 +3,7 @@ package com.example.noq;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -27,18 +25,14 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class NavActivity extends AppCompatActivity
+public class MyPlacesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private GetPlacesTask mRunGetPlacesTask = null;
+    private GetMyPlacesTask mRunGetMyPlacesTask = null;
 
     private  String placesData = null;
 
@@ -69,8 +63,8 @@ public class NavActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mRunGetPlacesTask = new GetPlacesTask();
-        mRunGetPlacesTask.execute((Void) null);
+        mRunGetMyPlacesTask = new GetMyPlacesTask();
+        mRunGetMyPlacesTask.execute((Void) null);
 
         mEmail = getIntent().getStringExtra("email");
     }
@@ -151,7 +145,7 @@ public class NavActivity extends AppCompatActivity
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class GetPlacesTask extends AsyncTask<Object, String, String> {
+    public class GetMyPlacesTask extends AsyncTask<Object, String, String> {
         private RecyclerView recyclerView;
         private RecyclerView.Adapter mAdapter;
         private RecyclerView.LayoutManager layoutManager;
@@ -167,7 +161,7 @@ public class NavActivity extends AppCompatActivity
 
             String returnData ="";
 
-            String url = "https://noqueue-app.herokuapp.com/places";
+            String url = "https://noqueue-app.herokuapp.com/myplaces?email="+mEmail;
             DownloadUrl downloadUrl = new DownloadUrl();
             try {
                 returnData = downloadUrl.readUrl(url);
@@ -184,7 +178,7 @@ public class NavActivity extends AppCompatActivity
         protected void onPostExecute(String result) {
             Log.d("Result", result);
             DownloadUrl downloadUrl = new DownloadUrl();
-            mRunGetPlacesTask = null;
+            mRunGetMyPlacesTask = null;
             int get_places_responseCode = downloadUrl.getResponseCode();
             if(get_places_responseCode == 200){
                 placesData = result;
@@ -193,7 +187,7 @@ public class NavActivity extends AppCompatActivity
                 coordinator_layout = findViewById(R.id.coordinator_layout);
 
                 recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-                layoutManager = new LinearLayoutManager(NavActivity.this);
+                layoutManager = new LinearLayoutManager(MyPlacesActivity.this);
                 recyclerView.setLayoutManager(layoutManager);
                 ArrayList<String> allPlaces = new ArrayList<>();
 
@@ -210,7 +204,7 @@ public class NavActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mAdapter = new RecyclerAdapter((ArrayList<String>)allPlaces, "user");
+                mAdapter = new RecyclerAdapter((ArrayList<String>)allPlaces, "admin");
                 recyclerView.setAdapter(mAdapter);
             }
             if(get_places_responseCode == 401){
@@ -225,3 +219,6 @@ public class NavActivity extends AppCompatActivity
         }
     }
 }
+
+
+

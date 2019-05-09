@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <!-- A CardView that contains a TextView -->
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:elevation="8dp"
+        android:layout_gravity="center_horizontal"
+        card_view:cardCornerRadius="4dp">
+
+        <ImageView
+            android:id="@+id/place_image"
+            android:layout_width="match_parent"
+            android:layout_height="258dp"
+            android:src="@drawable/green_house_cafe1" />
+
+        <TextView
+            android:id="@+id/place_name"
+            android:layout_width="match_parent"
+            android:layout_height="73dp"
+            android:layout_marginTop="490px"
+            android:background="#80000000"
+            android:gravity="center_vertical"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="80px"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/place_address"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="682px"
+            android:paddingLeft="10px"
+            android:gravity="center_vertical"
+            android:text="Address"
+            android:textColor="#000000"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="750px"
+            android:paddingLeft="10px"
+            android:gravity="center_vertical"
+            android:text="Wait Time"
+            android:textColor="#000000"
+            android:textSize="40px" />
+
+        <Button
+            android:id="@+id/btn_viewPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="820px"
+            android:background="#ffffff"
+            android:paddingLeft="10px"
+            android:text="VIEW"
+            android:textColor="#0000FF"
+            android:textSize="40px" />
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
