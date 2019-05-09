@@ -98,7 +98,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_maps">Map</string>
     <string name="join_queue">Join Queue</string>
-    <string name="wait_time">Wait Time :</string>
+    <string name="wait_time">Wait Time : </string>
     <string name="value">Value</string>
     <string name="title_queue_list">Items</string>
     <string name="title_queue_detail">queue Detail</string>

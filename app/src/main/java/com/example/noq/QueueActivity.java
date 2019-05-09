@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
-import android.content.Intent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class QueueActivity extends AppCompatActivity {
 
     private JoinQueueTask mJoinQueueTask = null;
 
-    private UnJoinQueueTask mUnJoinQueueTask = null;
+    private LeaveQueueTask mLeaveQueueTask = null;
 
     private QueueActivity parent = this;
 
@@ -69,8 +68,8 @@ public class QueueActivity extends AppCompatActivity {
                     mJoinQueueTask = new JoinQueueTask(userId, placeId, parent);
                     mJoinQueueTask.execute((Void) null);
                 } else {
-                    mUnJoinQueueTask = new UnJoinQueueTask(userId, placeId, parent);
-                    mUnJoinQueueTask.execute((Void) null);
+                    mLeaveQueueTask = new LeaveQueueTask(userId, placeId, parent);
+                    mLeaveQueueTask.execute((Void) null);
                 }
             }
         });
@@ -140,7 +139,7 @@ public class QueueActivity extends AppCompatActivity {
                     queuePositionKey.setVisibility(View.VISIBLE);
                     queuePositionValue.setText(String.valueOf(queuePosition));
                     queuePositionValue.setVisibility(View.VISIBLE);
-                    joinQueue.setText("UNJOIN QUEUE");
+                    joinQueue.setText("LEAVE QUEUE");
                     userJoinedQueue = true;
                 } else {
                     queuePosition = Integer.parseInt(queueData.get("queueLength"))+1;
@@ -212,7 +211,7 @@ public class QueueActivity extends AppCompatActivity {
             queuePositionValue.setText(String.valueOf(queuePosition));
             queuePositionValue.setVisibility(View.VISIBLE);
 
-            joinQueue.setText("UNJOIN QUEUE");
+            joinQueue.setText("LEAVE QUEUE");
 
             userJoinedQueue = true;
 
@@ -228,13 +227,13 @@ public class QueueActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UnJoinQueueTask extends AsyncTask<Object, String, String> {
+    public class LeaveQueueTask extends AsyncTask<Object, String, String> {
 
         private final String mEmail;
         private final String mPlaceId;
         private  final QueueActivity mActivity;
 
-        UnJoinQueueTask(String email, String placeId, QueueActivity activity) {
+        LeaveQueueTask(String email, String placeId, QueueActivity activity) {
             mEmail = email;
             mPlaceId = placeId;
             this.mActivity = activity;
@@ -252,7 +251,7 @@ public class QueueActivity extends AppCompatActivity {
             PostUrl postUrl = new PostUrl();
             try {
                 returnData = postUrl.postData(removeUser, url);
-                Log.d("Unjoin Queue success", returnData);
+                Log.d("Leave Queue success", returnData);
 
                 runOnUiThread(new Runnable(){
                     public void run() {
